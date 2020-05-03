@@ -1,33 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
-import BorderBlobs from './components/BorderBlobs'
-import BlobGen from './components/BlobGen'
+import BorderBlobs from "./components/BorderBlobs";
 
-import randomNumber from './helpers/randomNumber'
-
+import generateBorderCoords from "./helpers/generateBorderCoords";
 
 function App() {
+  const [coords, setCoords] = useState("");
+  const colorGroup = [
+    "#628d5e",
+    "#91ad8d",
+    "#c0cfbe",
+    "#f1f1f1",
+    "#e3eeed",
+    "#d5ecea",
+    "#c7e9e7"
+  ].reverse();
+  const sizeRange = [(colorGroup.length - 1) * 100, colorGroup.length * 100];
+  const gapRange = [(colorGroup.length - 1) * 10, colorGroup.length * 10];
 
-  const colorGroup = ['#495867', '#577399', '#bdd5ea', '#f7f7ff', '#fe5f55'];
-  const sizeRange = [((colorGroup.length - 1) * 100), (colorGroup.length * 100)];
-  const gapRange = [((colorGroup.length - 1) * 10), (colorGroup.length * 10)]
+  useEffect(() => {
+    setCoords(generateBorderCoords());
+  }, []);
 
   return (
     <div
       style={{
-        display: 'flex',
-        width: '100%',
-        height: '100%'
+        display: "flex",
+        width: "100%",
+        height: "100%"
       }}
     >
       <BorderBlobs
         colorGroup={colorGroup}
-        maxWidth={randomNumber(sizeRange[0], sizeRange[1])}
-        maxHeight={randomNumber(sizeRange[0], sizeRange[1])}
-        widthGap={randomNumber(gapRange[0], gapRange[1])}
-        heightGap={randomNumber(gapRange[0], gapRange[1])}
+        maxWidth={sizeRange}
+        maxHeight={sizeRange}
+        widthGap={gapRange}
+        heightGap={gapRange}
+        coords={coords}
       />
-      {/* <BlobGen /> */}
+      <button
+        style={{
+          padding: "16px 8px",
+          width: "150px",
+          appearance: "none",
+          background: "white",
+          color: "black",
+          position: "fixed",
+          bottom: "5vh",
+          left: "calc(50% - 75px)",
+          fontSize: "1rem"
+        }}
+        onClick={() => setCoords(generateBorderCoords())}
+      >
+        CREATE BLOB
+      </button>
     </div>
   );
 }
